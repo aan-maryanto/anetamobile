@@ -34,7 +34,7 @@ import { CoreCourseProvider } from './course';
 import { CoreCourseOfflineProvider } from './course-offline';
 import { CoreCourseModuleDelegate } from './module-delegate';
 import { CoreCourseModulePrefetchDelegate } from './module-prefetch-delegate';
-import { CoreLoginHelperProvider } from '@core/login/providers/helper';
+import { CoreLoginHelper, CoreLoginHelperProvider } from '@core/login/providers/helper';
 import { CoreConstants } from '@core/constants';
 import { CoreSite } from '@classes/site';
 import { CoreLoggerProvider } from '@providers/logger';
@@ -122,7 +122,6 @@ export class CoreCourseHelperProvider {
             private timeUtils: CoreTimeUtilsProvider,
             private utils: CoreUtilsProvider,
             private translate: TranslateService,
-            private loginHelper: CoreLoginHelperProvider,
             private courseOptionsDelegate: CoreCourseOptionsDelegate,
             private siteHomeProvider: CoreSiteHomeProvider,
             private eventsProvider: CoreEventsProvider,
@@ -419,11 +418,11 @@ export class CoreCourseHelperProvider {
 
         try {
 
-            await this.domUtils.showDeleteConfirm('core.course.confirmdeletemodulefiles');
+            await this.domUtils.showDeleteConfirm('core.course.confirmdeletestoreddata');
 
             modal = this.domUtils.showModalLoading();
 
-            await this.prefetchDelegate.removeModuleFiles(module, courseId);
+            await this.removeModuleStoredData(module, courseId);
 
             done && done();
 
@@ -580,6 +579,10 @@ export class CoreCourseHelperProvider {
                 return Promise.reject(this.utils.createFakeWSError('core.filenotfound', true));
             }
 
+            if (!this.fileHelper.isOpenableInApp(module.contents[0])) {
+                return this.fileHelper.showConfirmOpenUnsupportedFile();
+            }
+        }).then(() => {
             return this.sitesProvider.getSite(siteId);
         }).then((site) => {
             const mainFile = files[0],
@@ -609,7 +612,7 @@ export class CoreCourseHelperProvider {
                     // Not online, get the offline file. It will fail if not found.
                     return this.filepoolProvider.getInternalUrlByUrl(siteId, fileUrl).then((path) => {
                         return this.utils.openFile(path);
-                    }).catch((error) => {
+                    }, (error) => {
                         return Promise.reject(this.translate.instant('core.networkerrormsg'));
                     });
                 }
@@ -850,7 +853,7 @@ export class CoreCourseHelperProvider {
             if (typeof instance.contextFileStatusObserver == 'undefined' && component) {
                 // Debounce the update size function to prevent too many calls when downloading or deleting a whole activity.
                 const debouncedUpdateSize = this.utils.debounce(() => {
-                    this.prefetchDelegate.getModuleDownloadedSize(module, courseId).then((moduleSize) => {
+                    this.prefetchDelegate.getModuleStoredSize(module, courseId).then((moduleSize) => {
                         instance.size = moduleSize > 0 ? this.textUtils.bytesToSize(moduleSize, 2) : 0;
                     });
                 }, 1000);
@@ -1131,7 +1134,7 @@ export class CoreCourseHelperProvider {
             this.prefetchDelegate.invalidateModuleStatusCache(module);
         }
 
-        promises.push(this.prefetchDelegate.getModuleDownloadedSize(module, courseId).then((moduleSize) => {
+        promises.push(this.prefetchDelegate.getModuleStoredSize(module, courseId).then((moduleSize) => {
             moduleInfo.size = moduleSize;
             moduleInfo.sizeReadable = this.textUtils.bytesToSize(moduleSize, 2);
         }));
@@ -1298,7 +1301,7 @@ export class CoreCourseHelperProvider {
             if (courseId == site.getSiteHomeId()) {
                 // Check if site home is available.
                 return this.siteHomeProvider.isAvailable().then(() => {
-                    this.loginHelper.redirect('CoreSiteHomeIndexPage', params, siteId);
+                    CoreLoginHelper.instance.redirect('CoreSiteHomeIndexPage', params, siteId);
                 }).finally(() => {
                     modal.dismiss();
                 });
@@ -1597,7 +1600,7 @@ export class CoreCourseHelperProvider {
      * @param siteId Site ID. If not defined, current site.
      * @return Promise resolved when done.
      */
-    openCourse(navCtrl: NavController, course: any, params?: any, siteId?: string): Promise<any> {
+    openCourse(navCtrl: NavController, course: any, params?: any, siteId?: string): Promise<void> {
         if (!siteId || siteId == this.sitesProvider.getCurrentSiteId()) {
             // Current site, we can open the course.
             return this.courseProvider.openCourse(navCtrl, course, params);
@@ -1606,7 +1609,7 @@ export class CoreCourseHelperProvider {
             params = params || {};
             Object.assign(params, { course: course });
 
-            return this.loginHelper.redirect(CoreLoginHelperProvider.OPEN_COURSE, params, siteId);
+            return CoreLoginHelper.instance.redirect(CoreLoginHelperProvider.OPEN_COURSE, params, siteId);
         }
     }
 
@@ -1621,10 +1624,30 @@ export class CoreCourseHelperProvider {
         const modules = CoreArray.flatten(sections.map((section) => section.modules));
 
         await Promise.all(
-            modules.map((module) => this.prefetchDelegate.removeModuleFiles(module, courseId)),
+            modules.map((module) => this.removeModuleStoredData(module, courseId)),
         );
 
         await this.courseProvider.setCourseStatus(courseId, CoreConstants.NOT_DOWNLOADED);
+    }
+
+    /**
+     * Remove module stored data.
+     *
+     * @param module Module to remove the files.
+     * @param courseId Course ID the module belongs to.
+     * @return Promise resolved when done.
+     */
+    async removeModuleStoredData(module: any, courseId: number): Promise<void> {
+        const promises = [];
+
+        promises.push(this.prefetchDelegate.removeModuleFiles(module, courseId));
+
+        const handler = this.prefetchDelegate.getPrefetchHandlerFor(module);
+        if (handler) {
+            promises.push(this.sitesProvider.getCurrentSite().deleteComponentFromCache(handler.component, module.id));
+        }
+
+        await Promise.all(promises);
     }
 
 }

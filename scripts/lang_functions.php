@@ -210,6 +210,18 @@ function build_lang($lang, $keys) {
         $string = get_translation_strings($langfoldername, $value->file, $override_langfolder);
         // Apply translations.
         if (!$string) {
+            if ($value->file == 'donottranslate') {
+                // Restore it form the json.
+                if ($langFile && is_array($langFile) && isset($langFile[$key])) {
+                    $translations[$key] = $langFile[$key];
+                } else {
+                    // If not present, do not count it in the total.
+                    $total--;
+                }
+
+                continue;
+            }
+
             if (TOTRANSLATE) {
                 echo "\n\t\tTo translate $value->string on $value->file";
             }
@@ -312,6 +324,10 @@ function detect_lang($lang, $keys) {
         $string = get_translation_strings($langfoldername, $value->file);
         // Apply translations.
         if (!$string) {
+            // Do not count non translatable in the totals.
+            if ($value->file == 'donottranslate') {
+                $total--;
+            }
             continue;
         }
 
@@ -383,6 +399,9 @@ function override_component_lang_files($keys, $translations) {
                 break;
             case 'assets':
                 $path .= $type.'/'.$component;
+                break;
+            default:
+                $path .= $type.'/lang';
                 break;
 
         }
