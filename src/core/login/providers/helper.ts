@@ -1193,7 +1193,7 @@ export class CoreLoginHelperProvider {
      * @param message The warning message.
      */
     protected showWorkplaceNoticeModal(message: string): void {
-        const link = this.appProvider.getAppStoreUrl({android: 'com.moodle.workplace', ios: 'id1470929705' });
+        const link = this.appProvider.getAppStoreUrl({android: 'com.aneta.mobileworkplace', ios: 'id1470929705' });
 
         this.showDownloadAppNoticeModal(message, link);
     }

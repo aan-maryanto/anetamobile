@@ -85,22 +85,22 @@ export class CoreLoginSitePage {
         this.siteSelector = CoreConfigConstants.multisitesdisplay;
 
         // Load fixed sites if they're set.
-        if (this.loginHelper.hasSeveralFixedSites()) {
-            this.fixedSites = <any[]> this.loginHelper.getFixedSites();
-            // Autoselect if not defined.
-            if (['list', 'listnourl', 'select', 'buttons'].indexOf(this.siteSelector) < 0) {
-                this.siteSelector = this.fixedSites.length > 8 ? 'list' : (this.fixedSites.length > 3 ? 'select' : 'buttons');
-            }
-            this.filteredSites = this.fixedSites;
-            url = this.fixedSites[0].url;
-        } else if (CoreConfigConstants.enableonboarding && !this.appProvider.isIOS() && !this.appProvider.isMac()) {
-            CoreConfig.instance.get(CoreLoginHelperProvider.ONBOARDING_DONE, false).then((onboardingDone) => {
-                if (!onboardingDone) {
-                    // Check onboarding.
-                    this.showOnboarding();
-                }
-            });
-        }
+        // if (this.loginHelper.hasSeveralFixedSites()) {
+        //     this.fixedSites = <any[]> this.loginHelper.getFixedSites();
+        //     // Autoselect if not defined.
+        //     if (['list', 'listnourl', 'select', 'buttons'].indexOf(this.siteSelector) < 0) {
+        //         this.siteSelector = this.fixedSites.length > 8 ? 'list' : (this.fixedSites.length > 3 ? 'select' : 'buttons');
+        //     }
+        //     this.filteredSites = this.fixedSites;
+        //     url = this.fixedSites[0].url;
+        // } else if (CoreConfigConstants.enableonboarding && !this.appProvider.isIOS() && !this.appProvider.isMac()) {
+        //     CoreConfig.instance.get(CoreLoginHelperProvider.ONBOARDING_DONE, false).then((onboardingDone) => {
+        //         if (!onboardingDone) {
+        //             // Check onboarding.
+        //             this.showOnboarding();
+        //         }
+        //     });
+        // }
 
         this.showScanQR = this.utils.canScanQR() && (typeof CoreConfigConstants['displayqronsitescreen'] == 'undefined' ||
             !!CoreConfigConstants['displayqronsitescreen']);

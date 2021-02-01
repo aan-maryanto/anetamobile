@@ -52,6 +52,7 @@
   "addon.block_myoverview.shortname": "block_myoverview",
   "addon.block_myoverview.title": "block_myoverview",
   "addon.block_newsitems.pluginname": "block_news_items",
+  "addon.block_mentees.pluginname": "block_mentees",
   "addon.block_onlineusers.pluginname": "block_online_users",
   "addon.block_privatefiles.pluginname": "block_private_files",
   "addon.block_recentactivity.pluginname": "block_recent_activity",

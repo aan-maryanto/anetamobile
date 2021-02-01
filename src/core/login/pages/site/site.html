@@ -1,18 +1,18 @@
 <ion-header>
     <ion-navbar core-back-button>
-        <ion-title>{{ 'core.login.connecttomoodle' | translate }}</ion-title>
-
-        <ion-buttons end>
+        <!-- <ion-title>{{ 'core.login.connecttomoodle' | translate }}</ion-title> -->
+        <ion-title>Aneta</ion-title>
+        <!-- <ion-buttons end>
             <button ion-button icon-only navPush="CoreAppSettingsPage" [attr.aria-label]="'core.settings.appsettings' | translate">
                 <core-icon name="fa-cogs"></core-icon>
             </button>
-        </ion-buttons>
+        </ion-buttons> -->
     </ion-navbar>
 </ion-header>
 <ion-content padding>
     <div>
         <div text-center padding margin-bottom [class.hidden]="hasSites || enteredSiteUrl" class="core-login-site-logo">
-            <img src="assets/img/login_logo.png" class="avatar-full login-logo" role="presentation">
+            <img src="assets/img/aneta.png" class="avatar-full login-logo" role="presentation">
         </div>
         <form ion-list [formGroup]="siteForm" (ngSubmit)="connect($event, siteForm.value.siteUrl)" *ngIf="!fixedSites || siteSelector == 'select'" #siteFormEl>
             <!-- Form to input the site URL if there are no fixed sites. -->
@@ -70,23 +70,23 @@
             </ion-item>
         </form>
 
-        <ng-container *ngIf="fixedSites">
+        <!-- <ng-container *ngIf="fixedSites"> -->
             <!-- Pick the site from a list of fixed sites. -->
-            <ion-list *ngIf="siteSelector == 'list' || siteSelector == 'listnourl'">
+            <!-- <ion-list *ngIf="siteSelector == 'list' || siteSelector == 'listnourl'">
                 <ion-item no-lines><h2 class="item-heading">{{ 'core.login.selectsite' | translate }}</h2></ion-item>
                 <ion-searchbar *ngIf="fixedSites.length > 4" [(ngModel)]="filter" (ionInput)="filterChanged($event)" (ionCancel)="filterChanged()" [placeholder]="'core.login.findyoursite' | translate"></ion-searchbar>
                 <ion-item *ngFor="let site of filteredSites" (click)="connect($event, site.url)" [title]="site.name" detail-push text-wrap>
                     <h2>{{site.name}}</h2>
                     <p *ngIf="siteSelector == 'list'">{{site.url}}</p>
                 </ion-item>
-            </ion-list>
+            </ion-list> -->
 
             <!-- Display them using buttons. -->
-            <div *ngIf="siteSelector == 'buttons'">
+            <!-- <div *ngIf="siteSelector == 'buttons'">
                 <p class="padding no-padding-bottom">{{ 'core.login.selectsite' | translate }}</p>
                 <a *ngFor="let site of fixedSites" ion-button block (click)="connect($event, site.url)" [title]="site.name" margin-bottom>{{site.name}}</a>
-            </div>
-        </ng-container>
+            </div> -->
+        <!-- </ng-container> -->
 
         <ng-container *ngIf="showScanQR && !hasSites && !enteredSiteUrl">
             <div class="core-login-site-qrcode-separator">{{ 'core.login.or' | translate }}</div>

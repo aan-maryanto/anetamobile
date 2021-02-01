@@ -159,6 +159,7 @@ import { AddonFilterModule } from '@addon/filter/filter.module';
 import { AddonModH5PActivityModule } from '@addon/mod/h5pactivity/h5pactivity.module';
 
 import { setSingletonsInjector } from '@singletons/core.singletons';
+import { AddonBlockMenteesModule } from '@addon/block/mentees/mentees.module';
 
 // For translate loader. AoT requires an exported function for factories.
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
@@ -266,6 +267,7 @@ export const WP_PROVIDER: any = null;
         AddonBlockMyOverviewModule,
         AddonBlockNewsItemsModule,
         AddonBlockOnlineUsersModule,
+        AddonBlockMenteesModule,
         AddonBlockPrivateFilesModule,
         AddonBlockSiteMainMenuModule,
         AddonBlockTimelineModule,

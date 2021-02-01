@@ -59,6 +59,9 @@ export class CoreCoursesDashboardProvider {
             }
 
             return site.read('core_block_get_dashboard_blocks', params, preSets).then((result) => {
+                console.log("Block params : "+JSON.stringify(params))
+                console.log("Block Preset : "+JSON.stringify(preSets))
+                console.log("Block Dashboard : "+JSON.stringify(result))
                 return result.blocks || [];
             });
         });

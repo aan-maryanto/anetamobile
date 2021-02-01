@@ -240,9 +240,10 @@ export class CoreExternalContentDirective implements AfterViewInit, OnChanges {
 
         if (targetAttr === 'src' && tagName !== 'SOURCE' && tagName !== 'TRACK' && tagName !== 'VIDEO' && tagName !== 'AUDIO') {
             finalUrl = await this.filepoolProvider.getSrcByUrl(siteId, url, this.component, this.componentId, 0, true, dwnUnknown);
+            console.log("FinalURL1 : "+finalUrl)
         } else {
             finalUrl = await this.filepoolProvider.getUrlByUrl(siteId, url, this.component, this.componentId, 0, true, dwnUnknown);
-
+            console.log("FinalURL2 : "+finalUrl)
             finalUrl = CoreFile.instance.convertFileSrc(finalUrl);
         }
 

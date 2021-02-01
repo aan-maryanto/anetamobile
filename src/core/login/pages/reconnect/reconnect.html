@@ -14,8 +14,8 @@
 
         <div class="core-login-site-logo" *ngIf="!showSiteAvatar">
             <!-- Show site logo or a default image. -->
-            <img *ngIf="logoUrl" [src]="logoUrl" role="presentation" onError="this.src='assets/img/login_logo.png'">
-            <img *ngIf="!logoUrl" src="assets/img/login_logo.png" role="presentation">
+            <img *ngIf="logoUrl" [src]="logoUrl" role="presentation" onError="this.src='assets/img/aneta.png'">
+            <img *ngIf="!logoUrl" src="assets/img/aneta.png" role="presentation">
         </div>
 
         <h3 *ngIf="siteName" padding class="core-sitename"><core-format-text [text]="siteName" [filter]="false"></core-format-text></h3>

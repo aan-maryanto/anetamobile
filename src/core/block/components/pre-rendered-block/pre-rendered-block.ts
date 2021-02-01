@@ -37,7 +37,8 @@ export class CoreBlockPreRenderedComponent  extends CoreBlockBaseComponent imple
         super.ngOnInit();
 
         this.courseId = this.contextLevel == 'course' ? this.instanceId : undefined;
-
+        this.block.name === "mentees" ? console.log("Block 2 : "+this.block.contents.content) : undefined;
+        this.block.name === "mentees" ? console.log("Block 2 : "+ typeof this.block.contents.content) : undefined;
         this.fetchContentDefaultError = 'Error getting ' + this.block.contents.title + ' data.';
     }
 

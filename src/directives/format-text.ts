@@ -288,6 +288,8 @@ export class CoreFormatTextDirective implements OnChanges {
             return;
         }
 
+        console.log("Click")
+
         const expandInFullview = this.utils.isTrueOrOne(this.fullOnClick) || false;
 
         if (!expandInFullview && !this.showMoreDisplayed) {
@@ -352,7 +354,6 @@ export class CoreFormatTextDirective implements OnChanges {
         this.formatContents().then((result) => {
             // Disable media adapt to correctly calculate the height.
             this.element.classList.add('core-disable-media-adapt');
-
             this.element.innerHTML = ''; // Remove current contents.
             if (this.maxHeight && result.div.innerHTML != '') {
 

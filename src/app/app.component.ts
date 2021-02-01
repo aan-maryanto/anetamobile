@@ -27,6 +27,7 @@ import { CoreLoginHelperProvider } from '@core/login/providers/helper';
 import { Keyboard } from '@ionic-native/keyboard';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { CoreLoginSitesPage } from '@core/login/pages/sites/sites';
+import { CoreLoginSitePage } from '@core/login/pages/site/site';
 
 @Component({
     templateUrl: 'app.html'
@@ -83,7 +84,7 @@ export class MoodleMobileApp implements OnInit {
             // Go to sites page when user is logged out.
             // Due to DeepLinker, we need to use the ViewCtrl instead of name.
             // Otherwise some pages are re-created when they shouldn't.
-            this.appProvider.getRootNavController().setRoot(CoreLoginSitesPage);
+            this.appProvider.getRootNavController().setRoot(CoreLoginSitePage);
 
             // Unload lang custom strings.
             this.langProvider.clearCustomStrings();

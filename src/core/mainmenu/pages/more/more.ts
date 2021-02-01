@@ -24,6 +24,8 @@ import { CoreMainMenuProvider, CoreMainMenuCustomItem } from '../../providers/ma
 import { CoreLoginHelperProvider } from '@core/login/providers/helper';
 import { CoreContentLinksHelperProvider } from '@core/contentlinks/providers/helper';
 import { TranslateService } from '@ngx-translate/core';
+import { CoreLoginInitPage } from '@core/login/pages/init/init';
+
 
 /**
  * Page that displays the list of main menu options that aren't in the tabs.
@@ -206,5 +208,9 @@ export class CoreMainMenuMorePage implements OnDestroy {
      */
     logout(): void {
         this.sitesProvider.logout();
+    }
+
+    logoutCustom(): void {
+        this.navCtrl.setRoot('CoreLoginInitPage')
     }
 }
